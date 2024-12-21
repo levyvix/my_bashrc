@@ -105,4 +105,37 @@ update_prompt() {
     PS1='\[\e[38;5;45m\]'"$os_emoji"' \u \[\e[38;5;208m\]💻 @\h \[\e[38;5;220m\]🧠 '"$mem_usage"' \[\e[38;5;82m\]🌐 '"$git_remote"' \[\e[38;5;226m\]['"$git_branch"'] \[\e[38;5;129m\]🐍 Python '"$python_version"' \[\e[38;5;202m\]'"$venv_status"' \[\e[38;5;33m\]📁 \w\n\[\e[38;5;15m\]➜ '
 }
 
+deactivate() {
+    # reset old environment variables
+    if [ -n "$_OLD_VIRTUAL_PATH" ] ; then
+        PATH="$_OLD_VIRTUAL_PATH"
+        export PATH
+        unset _OLD_VIRTUAL_PATH
+    fi
+    if [ -n "$_OLD_VIRTUAL_PYTHONHOME" ] ; then
+        PYTHONHOME="$_OLD_VIRTUAL_PYTHONHOME"
+        export PYTHONHOME
+        unset _OLD_VIRTUAL_PYTHONHOME
+    fi
+
+    # This should detect bash and zsh, which have a hash command that must
+    # be called to get it to forget past commands.  Without forgetting
+    # past commands the $PATH changes we made may not be respected
+    if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
+        hash -r
+    fi
+
+    if [ -n "$_OLD_VIRTUAL_PS1" ] ; then
+        PS1="$_OLD_VIRTUAL_PS1"
+        export PS1
+        unset _OLD_VIRTUAL_PS1
+    fi
+
+    unset VIRTUAL_ENV
+    if [ ! "$1" = "nondestructive" ] ; then
+        # Self destruct!
+        unset -f deactivate
+    fi
+}
+
 PROMPT_COMMAND=update_prompt
